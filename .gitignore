@@ -1,0 +1,10 @@
+.debug
+.vscode
+venv
+application.json
+__pycache__
+*/__pycache__
+lambda.py
+main.py
+results.json
+events.py

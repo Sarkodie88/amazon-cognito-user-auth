@@ -1,0 +1,41 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: An AWS Serverless Specification template describing resources for cognito auth controller.
+
+Globals:
+  Function:
+    Timeout: 30
+    Architectures: [arm64]
+    Environment:
+      Variables:
+        cognito_client_id: "remmkdfhdfnner"
+        
+Resources:
+  AuthCore:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: app/cognito_auth.lambda_handler
+      Runtime: python3.9
+      FunctionName: auth-application
+      Description: 'Function to handle main auth operations'
+      MemorySize: 512
+      CodeUri: .
+      Policies:
+        - AmazonSSMFullAccess
+        - AmazonSQSFullAccess
+      Events:
+        GenerateInvoice:
+          Type: Api 
+          Properties:
+            Path: /invoice
+            Method: post
+          Cors:
+            AllowMethods: "'*'"
+            AllowOrigin: "'*'"
+            AllowHeaders: "'*'"
+        EndpointsProxy:
+          Type: Api 
+          Properties:
+            Path: /{proxy+}
+            Method: any
+      
